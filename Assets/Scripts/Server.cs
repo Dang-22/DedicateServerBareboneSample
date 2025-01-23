@@ -14,7 +14,6 @@ using UnityEngine.SceneManagement;
 public class Server : MonoBehaviour
 {
     string _ticketId;
-
     void Start()
     {
         DontDestroyOnLoad(gameObject);
@@ -38,7 +37,7 @@ public class Server : MonoBehaviour
 
         NetworkManager.Singleton.OnClientConnectedCallback += (clientId) => { Debug.Log("Client connected"); };
         NetworkManager.Singleton.OnServerStopped += (reason) => { Debug.Log("Server stopped"); };
-        NetworkManager.Singleton.SceneManager.LoadScene("Level1", LoadSceneMode.Single);
+        NetworkManager.Singleton.SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
         Debug.Log($"Started Server {transport.ConnectionData.Address}:{transport.ConnectionData.Port}");
 
         var callbacks = new MultiplayEventCallbacks();
@@ -89,7 +88,7 @@ public class Server : MonoBehaviour
 
         var backfillTicketProperties = new BackfillTicketProperties(results.MatchProperties);
 
-        string queueName = "test2"; // must match the name of the queue you want to use in matchmaker
+        string queueName = "test"; // must match the name of the queue you want to use in matchmaker
         string connectionString = MultiplayService.Instance.ServerConfig.IpAddress + ":" +
                                   MultiplayService.Instance.ServerConfig.Port;
 

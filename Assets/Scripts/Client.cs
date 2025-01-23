@@ -23,6 +23,7 @@ public class Client : MonoBehaviour
             initialized = true;
         }
 
+        NetworkManager.Singleton.Shutdown();
         await StartSearch();
     }
 
@@ -34,7 +35,7 @@ public class Client : MonoBehaviour
         };
 
         var attributes = new Dictionary<string, object>();
-        string queueName = "test2";
+        string queueName = "test";
         var options = new CreateTicketOptions(queueName, attributes);
 
         while (!await FindMatch(players, options)) // if we dont find a match, wait a second and try again
@@ -85,7 +86,6 @@ public class Client : MonoBehaviour
             }
         }
     }
-
     void LogConnectionEvent(NetworkManager manager, ConnectionEventData data)
     {
         switch (data.EventType)
