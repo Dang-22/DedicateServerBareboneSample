@@ -29,12 +29,19 @@ public class Example_ServerQueryHandler : MonoBehaviour
 
     void Update()
     {
-        if (m_ServerQueryHandler != null)
-        {
-            if (NetworkManager.Singleton.ConnectedClients.Count != m_ServerQueryHandler.CurrentPlayers)
-                m_ServerQueryHandler.CurrentPlayers = (ushort)NetworkManager.Singleton.ConnectedClients.Count;
+        // Only run this code if we are the server
+        if (!NetworkManager.Singleton.IsServer) return;
 
-            m_ServerQueryHandler.UpdateServerCheck();
+        // Now it's safe to access ConnectedClients
+        foreach (var client in NetworkManager.Singleton.ConnectedClients)
+        {
+            if (m_ServerQueryHandler != null)
+            {
+                if (NetworkManager.Singleton.ConnectedClients.Count != m_ServerQueryHandler.CurrentPlayers)
+                    m_ServerQueryHandler.CurrentPlayers = (ushort)NetworkManager.Singleton.ConnectedClients.Count;
+
+                m_ServerQueryHandler.UpdateServerCheck();
+            }
         }
     }
 

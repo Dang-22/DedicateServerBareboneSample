@@ -45,16 +45,23 @@ public class Client : MonoBehaviour
     {
         var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
         var ticketResponse = await MatchmakerService.Instance.CreateTicketAsync(players, options);
-
-        while (true)
+        
+        // Add timeout logic
+        float timeoutDuration = 60f; // 60 seconds timeout
+        float elapsedTime = 0f;
+        
+        while (elapsedTime < timeoutDuration)
         {
             await Awaitable.WaitForSecondsAsync(1f);
+            elapsedTime += 1f;
+            
             Debug.Log("Polling");
             var ticketStatusResponse = await MatchmakerService.Instance.GetTicketAsync(ticketResponse.Id);
             if (ticketStatusResponse?.Value is MultiplayAssignment assignment)
             {
                 Debug.Log("Response " + assignment.Status);
                 FindFirstObjectByType<TMP_Text>()?.SetText("Response " + assignment.Status);
+                
                 switch (assignment.Status)
                 {
                     case MultiplayAssignment.StatusOptions.Found:
@@ -84,6 +91,9 @@ public class Client : MonoBehaviour
                 }
             }
         }
+        
+        Debug.LogError("Match finding timed out");
+        return false;
     }
 
     void LogConnectionEvent(NetworkManager manager, ConnectionEventData data)

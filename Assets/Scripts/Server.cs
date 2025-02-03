@@ -19,7 +19,7 @@ public class Server : MonoBehaviour
     
     [SerializeField] private float backfillInitialDelay = 4f;
     [SerializeField] private float backfillCheckInterval = 1f;
-
+    
     void Start()
     {
         _serverManager = GetComponent<ServerManager>();
@@ -44,6 +44,13 @@ public class Server : MonoBehaviour
         
         await _multiplayHandler.SubscribeToEvents();
         await _matchmakingHandler.CreateBackfillTicket();
+
+        if (NetworkManager.Singleton.StartServer())
+        {
+            Debug.Log("Server started");
+            
+            NetworkManager.Singleton.SceneManager.LoadScene("Level1", LoadSceneMode.Single);
+        }
     }
 
     private IEnumerator InitializeBackfill()
