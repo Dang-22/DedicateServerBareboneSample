@@ -13,8 +13,7 @@ public class MatchmakingHandler
     public async Task CreateBackfillTicket()
     {
         var results = await MultiplayService.Instance.GetPayloadAllocationFromJsonAs<MatchmakingResults>();
-
-        Debug.Log($"Environment: {results.EnvironmentId} MatchId: {results.MatchId} MatchProperties: {results.MatchProperties}");
+        Debug.Log($"Creating backfill ticket with Environment: {results.EnvironmentId} MatchId: {results.MatchId}");
 
         var backfillTicketProperties = new BackfillTicketProperties(results.MatchProperties);
         string queueName = "test";
@@ -28,6 +27,7 @@ public class MatchmakingHandler
 
         Debug.Log("Requesting backfill ticket");
         _ticketId = await MatchmakerService.Instance.CreateBackfillTicketAsync(options);
+        Debug.Log($"Created backfill ticket with ID: {_ticketId}");
     }
 
     public async Task ApproveBackfillTicket()
