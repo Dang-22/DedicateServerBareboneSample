@@ -101,10 +101,6 @@ public class Client : MonoBehaviour
         switch (data.EventType)
         {
             case ConnectionEvent.ClientConnected:
-                FindFirstObjectByType<TMP_Text>().SetText("Client connected " + data.ClientId +
-                                                          " Count:" +
-                                                          NetworkManager.Singleton.ConnectedClientsIds.Count + " Port:" + 
-                                                          (manager.NetworkConfig.NetworkTransport as UnityTransport)?.ConnectionData.Port);
                 break;
             case ConnectionEvent.ClientDisconnected:
                 FindFirstObjectByType<TMP_Text>()
